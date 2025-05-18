@@ -2,23 +2,12 @@
 const express = require('express');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
-const uniqueIPs = new Set();
+
 const app = express();
 const PORT = process.env.PORT || 3000; // ✅ Render provides PORT via env var
 
 app.use(cors());
 app.use(express.json());
-// POST request to register unique visits based on IP
-app.post('/unique-visits', (req, res) => {
-    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    uniqueIPs.add(ip);
-    res.sendStatus(200);
-});
-
-// GET request to return the unique visitor count
-app.get('/unique-visits', (req, res) => {
-    res.json({ uniqueVisitors: uniqueIPs.size });
-});
 
 // Your routes
 app.post('/server', async (req, res) => {
