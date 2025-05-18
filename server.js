@@ -23,10 +23,16 @@ app.post('/server', async (req, res) => {
     });
 
     const mailOptions = {
-        from: email,
+        from: env.EMAIL_USER,
         to: process.env.EMAIL_USER, // send to yourself
         subject: `New Message from ${name}`,
-        text: message
+        text: `You received a new message from your portfolio contact form.
+
+Name: ${name}
+Email: ${email}
+Message:
+${message}`
+
     };
 
     try {
