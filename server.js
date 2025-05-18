@@ -8,6 +8,24 @@ const PORT = process.env.PORT || 3000; // ✅ Render provides PORT via env var
 
 app.use(cors());
 app.use(express.json());
+let uniqueVisitors = 0;
+const visitorIPs = new Set();
+
+app.post('/api/visit', (req, res) => {
+  // Get IP of visitor (handle proxy if needed)
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+  if (!visitorIPs.has(ip)) {
+    visitorIPs.add(ip);
+    uniqueVisitors++;
+  }
+
+  res.json({ success: true });
+});
+
+app.get('/api/visitor-count', (req, res) => {
+  res.json({ uniqueVisitors });
+});
 
 // Your routes
 app.post('/server', async (req, res) => {
