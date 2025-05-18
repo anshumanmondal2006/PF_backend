@@ -14,7 +14,7 @@ const visitorIPs = new Set();
 app.post('/api/visit', (req, res) => {
   // Get IP of visitor (handle proxy if needed)
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-
+ console.log('Visitor IP:', ip);
   if (!visitorIPs.has(ip)) {
     visitorIPs.add(ip);
     uniqueVisitors++;
