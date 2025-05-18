@@ -2,12 +2,17 @@
 const express = require('express');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
-
+const uniqueVisitors = new Set();
 const app = express();
 const PORT = process.env.PORT || 3000; // ✅ Render provides PORT via env var
 
 app.use(cors());
 app.use(express.json());
+app.get('/unique-visits', (req, res) => {
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    uniqueVisitors.add(ip);
+    res.json({ uniqueVisitors: uniqueVisitors.size });
+});
 
 // Your routes
 app.post('/server', async (req, res) => {
