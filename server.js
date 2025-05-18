@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
-
+const PORT = process.env.PORT || 3000; // ✅ Render provides PORT via env var
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -44,5 +44,8 @@ ${message}`
 });
 app.get('/', (req, res) => {
     res.send('Server is ready to send messages');
+});
+app.listen(PORT, () => {
+    console.log(`✅ Server running at http://localhost:${PORT}`);
 });
 
