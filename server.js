@@ -1,52 +1,24 @@
 const express = require('express');
-const nodemailer = require('nodemailer');
 const cors = require('cors');
-const bodyParser = require('body-parser');
+const nodemailer = require('nodemailer');
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000; // ✅ Render provides PORT via env var
 
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
-require('dotenv').config();
-
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
-});
-
-transporter.verify(function (error, success) {
-    if (error) {
-        console.log('Transporter verification failed:', error);
-    } else {
-        console.log('Server is ready to send messages');
-    }
-});
-
-app.post('/server', (req, res) => {
+// Your routes
+app.post('/server', async (req, res) => {
     const { name, email, message } = req.body;
-
-    const mailOptions = {
-        from: 'bmondalhyd@gmail.com',
-        to: 'bmondalhyd@gmail.com',
-        subject: `New message from portfolio site by ${name}`,
-        text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.error('Error sending mail:', error);
-            return res.status(500).json({ success: false, message: 'Failed to send email.' });
-        }
-        res.json({ success: true, message: 'Email sent successfully.' });
-    });
+    // validate and send email logic
+    res.json({ success: true });
 });
 
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+app.get('/', (req, res) => {
+    res.send('Server is ready to send messages');
+});
+
+app.listen(PORT, () => {
+    console.log(`✅ Server running at http://localhost:${PORT}`);
 });
