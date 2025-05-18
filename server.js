@@ -1,15 +1,18 @@
+
 const express = require('express');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
-const PORT = process.env.PORT || 3000; // ✅ Render provides PORT via env var
+
 const app = express();
+const PORT = process.env.PORT || 3000; // ✅ Render provides PORT via env var
+
 app.use(cors());
 app.use(express.json());
 
+// Your routes
 app.post('/server', async (req, res) => {
     const { name, email, message } = req.body;
-
-    if (!name || !email || !message) {
+if (!name || !email || !message) {
         return res.status(400).json({ success: false, message: 'Missing fields' });
     }
 
@@ -22,16 +25,10 @@ app.post('/server', async (req, res) => {
     });
 
     const mailOptions = {
-        from: env.EMAIL_USER,
+        from: email,
         to: process.env.EMAIL_USER, // send to yourself
         subject: `New Message from ${name}`,
-        text: `You received a new message from your portfolio contact form.
-
-Name: ${name}
-Email: ${email}
-Message:
-${message}`
-
+        text: message
     };
 
     try {
@@ -45,7 +42,7 @@ ${message}`
 app.get('/', (req, res) => {
     res.send('Server is ready to send messages');
 });
+
 app.listen(PORT, () => {
     console.log(`✅ Server running at http://localhost:${PORT}`);
 });
-
